@@ -1,0 +1,41 @@
+@model Atividade2.Models.LoginViewModel
+
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Biblioteca - Login</title>
+</head>
+<body>
+
+	<div class="container-login">
+
+		@if (TempData["Erro"] != null)
+		{
+			<div class="alerta-erro">
+				@TempData["Erro"]
+			</div>
+		}
+
+		<form method="post" asp-controller="Login" asp-action="Index">
+			@Html.AntiForgeryToken()
+			<h1>Faça seu login</h1>
+
+			<label>Email</label>
+			<input type="email" name="Email" required />
+
+			<label>Senha</label>
+			<input type="password" name="Senha" required />
+
+			<button type="submit" class="botao-primario">Entrar</button>
+		</form>
+
+	</div>
+
+</body>
+</html>

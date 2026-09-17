@@ -1,0 +1,46 @@
+using Atividade2.Models;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+// EF Core - registra o contexto do banco
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// SESSION - necessário cache + serviço de sessão
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // tempo que a sessão fica ativa sem uso
+    options.Cookie.HttpOnly = true;    // impede acesso via JavaScript (mais seguro)
+    options.Cookie.IsEssential = true; // necessário pra funcionar mesmo com política de cookies
+});
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseRouting();
+
+app.UseSession(); // IMPORTANTE: depois de UseRouting, antes de UseAuthorization/endpoints
+
+app.UseAuthorization();
+
+app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Login}/{action=Index}/{id?}") // Login como página inicial
+    .WithStaticAssets();
+
+app.Run();
