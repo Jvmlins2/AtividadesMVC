@@ -1,0 +1,32 @@
+﻿@model List<Atividade3.Models.Alimento> // Adjusted to the correct namespace
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Cardápio</h1>
+    <p>Selecione os itens que deseja adicionar ao seu pedido.</p>
+    <p>@Model.Count itens disponíveis</p>
+</div>
+
+<h1>Lista de Alimentos</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Alimento alimento in Model)
+        {
+            <tr>
+                <td>@alimento.AlimentoID</td>
+                <td>@alimento.Nome</td>
+                <td>@alimento.Descricao</td>
+            </tr>
+        }
+    </tbody>
+</table>
